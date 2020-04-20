@@ -72,7 +72,7 @@ lsquic_time_now (void)
 #if LSQUIC_COUNT_TIME_CALLS
     ++n_time_now_calls;
 #endif
-#if defined(_POSIX_TIMERS) && _POSIX_TIMERS > 0
+#if (defined(_POSIX_TIMERS) && _POSIX_TIMERS > 0) || defined(__OpenBSD__)
     struct timespec ts;
     (void) clock_gettime(CLOCK_MONOTONIC, &ts);
     return (lsquic_time_t) ts.tv_sec * 1000000 + ts.tv_nsec / 1000;
