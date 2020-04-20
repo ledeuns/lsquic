@@ -6,6 +6,10 @@
 #ifndef TEST_COMMON_H
 #define TEST_COMMON_H 1
 
+#if __OpenBSD__
+#   include <sys/socket.h>
+#endif
+
 #if __linux__
 #   include <net/if.h>  /* For IFNAMSIZ */
 #endif
