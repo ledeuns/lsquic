@@ -160,7 +160,7 @@ ENDIF()
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 INCLUDE_DIRECTORIES(include)
-IF(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+IF(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR CMAKE_SYSTEM_NAME STREQUAL "Darwin" OR CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")
     # Find libevent on FreeBSD:
     include_directories( /usr/local/include )
     link_directories( /usr/local/lib )
@@ -195,6 +195,9 @@ ELSE()
 ENDIF()
 IF (CMAKE_SYSTEM_NAME STREQUAL Windows)
     FIND_LIBRARY(EVENT_LIB event)
+ELSEIF(CMAKE_SYSTEM_NAME STREQUAL OpenBSD)
+    FIND_LIBRARY(EVENT_LIB libevent_core.a)
+    FIND_LIBRARY(EVENTEXTRA_LIB libevent_extra.a)    
 ELSE()
     FIND_LIBRARY(EVENT_LIB libevent.a)
     IF(NOT EVENT_LIB)
@@ -214,7 +217,7 @@ add_executable(echo_server test/echo_server.c test/prog.c test/test_common.c tes
 add_executable(echo_client test/echo_client.c test/prog.c test/test_common.c test/test_cert.c)
 
 
-SET(LIBS lsquic ${EVENT_LIB} ${BORINGSSL_LIB_ssl} ${BORINGSSL_LIB_crypto} ${ZLIB_LIB} ${LIBS})
+SET(LIBS lsquic ${EVENT_LIB} ${EVENTEXTRA_LIB} ${BORINGSSL_LIB_ssl} ${BORINGSSL_LIB_crypto} ${ZLIB_LIB} ${LIBS})
 
 IF (NOT MSVC)
 
